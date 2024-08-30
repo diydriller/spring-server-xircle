@@ -21,13 +21,4 @@ abstract class BaseEntity {
 
     @Column(name = "is_deleted")
     var isDeleted: Boolean = false
-
-
-    fun delete() {
-        isDeleted = true
-    }
-
-    fun restore() {
-        isDeleted = false
-    }
 }

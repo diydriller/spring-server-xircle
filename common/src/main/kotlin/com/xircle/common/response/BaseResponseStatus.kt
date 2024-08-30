@@ -6,6 +6,8 @@ enum class BaseResponseStatus(
     val message: String
 ){
     SUCCESS(true, 1000, "요청에 성공하였습니다."),
+    FOLLOW_SUCCESS(true, 1001, "팔로우가 되었습니다."),
+    UNFOLLOW_SUCCESS(true, 1002, "팔로우 취소가 되었습니다."),
 
     ALREADY_EXIST_EMAIL(false,2000,"이미 존재하는 이메일입니다."),
     ALREADY_EXIST_NAME(false,2001,"이미 존재하는 별명입니다."),
