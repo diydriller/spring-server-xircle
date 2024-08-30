@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: API
+
+  profiles:
+    active: local
+    include:
+      - core
+jwt:
+  secret: xircle
