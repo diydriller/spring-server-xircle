@@ -12,8 +12,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
+import org.springframework.web.filter.CorsFilter
 
 
 @Configuration
@@ -23,30 +24,37 @@ class SecurityConfig(
     private val passwordEncoder: PasswordEncoder,
     private val tokenProvider: TokenProvider,
     private val memberStore: MemberStore,
-    private val objectMapper: ObjectMapper
+    private val objectMapper: ObjectMapper,
+    private val baseAuthenticationEntryPoint: BaseAuthenticationEntryPoint,
+    private val baseAccessDeniedHandler: BaseAccessDeniedHandler
 ) {
     @Bean
     fun filterChain(http: HttpSecurity, authenticationManager: AuthenticationManager): SecurityFilterChain {
-        http.csrf {
-            it.disable()
-        }.sessionManagement {
-            it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        }.formLogin {
-            it.disable()
-        }.httpBasic {
-            it.disable()
-        }.addFilter(
-            JwtAuthenticationAttemptFilter(
-                authenticationManager, memberStore, tokenProvider, objectMapper
-            )
-        ).addFilter(
-            JwtAuthenticationValidateFilter(
-                authenticationManager, memberStore, tokenProvider, objectMapper
-            )
-        ).authorizeHttpRequests {
-            it.requestMatchers("/member", "/login").permitAll()
-                .anyRequest().authenticated()
-        }
+        http
+            .addFilter(corsFilter())
+            .csrf {
+                it.disable()
+            }.sessionManagement {
+                it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            }.formLogin {
+                it.disable()
+            }.httpBasic {
+                it.disable()
+            }.addFilter(
+                JwtAuthenticationAttemptFilter(
+                    authenticationManager, memberStore, tokenProvider, objectMapper
+                )
+            ).addFilter(
+                JwtAuthenticationValidateFilter(
+                    authenticationManager, memberStore, tokenProvider
+                )
+            ).authorizeHttpRequests {
+                it.requestMatchers("/member", "/login").permitAll()
+                    .anyRequest().authenticated()
+            }.exceptionHandling {
+                it.authenticationEntryPoint(baseAuthenticationEntryPoint)
+                it.accessDeniedHandler(baseAccessDeniedHandler)
+            }
         return http.build()
     }
 
@@ -55,5 +63,17 @@ class SecurityConfig(
         val authManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder::class.java)
         authManagerBuilder.userDetailsService(memberDetailService).passwordEncoder(passwordEncoder)
         return authManagerBuilder.build()
+    }
+
+    @Bean
+    fun corsFilter(): CorsFilter {
+        val source: UrlBasedCorsConfigurationSource = UrlBasedCorsConfigurationSource()
+        val config = CorsConfiguration()
+        config.allowCredentials = true
+        config.addAllowedOrigin("*")
+        config.addAllowedHeader("*")
+        config.addAllowedMethod("*")
+        source.registerCorsConfiguration("/**", config)
+        return CorsFilter(source)
     }
 }

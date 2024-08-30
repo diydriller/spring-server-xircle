@@ -15,7 +15,8 @@ enum class BaseResponseStatus(
     NOT_EQUAL_PASSWORD(false,2003,"일치하지 않는 비밀번호입니다."),
     NOT_EXIST_USER(false,2004,"존재하지 않는 유저입니다."),
 
-    AUTHENTICATION_ERROR(false,2101,"인증되지 않았습니다."),
+    AUTHENTICATION_ERROR(false,4000,"인증되지 않았습니다."),
+    AUTHORIZATION_ERROR(false, 4001, "권한이 없습니다."),
 
     ILLEGAL_ARGUMENT_ERROR(false, 5001, "서버 - 잘못된 인자 오류.")
 }
