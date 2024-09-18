@@ -21,4 +21,8 @@ class MemberDetails(
     override fun getUsername(): String {
         return member.email
     }
+
+    fun getId(): Long? {
+        return member.id
+    }
 }
