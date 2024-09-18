@@ -49,4 +49,8 @@ class MemberStore(
         ).reduceOrNull(Specification<Member>::and)
         return memberJpaRepository.findAll(searchSpecification ?: Specification.where(null), pageable).toList()
     }
+
+    fun findMemberProfileById(memberId: Long): Member {
+        return memberJpaRepository.findMemberProfileById(memberId) ?: throw ConflictException(BaseResponseStatus.NOT_EXIST_MEMBER)
+    }
 }

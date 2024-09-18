@@ -12,4 +12,9 @@ class MemberService(private val memberStore: MemberStore) {
     fun searchMember(page: Int, size: Int, userId: Long, memberSearchCondition: MemberSearchCondition): List<Member> {
         return memberStore.findMemberByCondition(page, size, userId, memberSearchCondition)
     }
+
+    @Transactional
+    fun getMemberProfile(memberId: Long): Member {
+        return memberStore.findMemberProfileById(memberId)
+    }
 }

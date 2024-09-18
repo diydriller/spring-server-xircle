@@ -13,7 +13,7 @@ enum class BaseResponseStatus(
     ALREADY_EXIST_NAME(false,2001,"이미 존재하는 별명입니다."),
     NOT_EXIST_EMAIL(false,2002,"존재하지 않는 이메일입니다."),
     NOT_EQUAL_PASSWORD(false,2003,"일치하지 않는 비밀번호입니다."),
-    NOT_EXIST_USER(false,2004,"존재하지 않는 유저입니다."),
+    NOT_EXIST_MEMBER(false,2004,"존재하지 않는 멤버입니다."),
 
     AUTHENTICATION_ERROR(false,4000,"인증되지 않았습니다."),
     AUTHORIZATION_ERROR(false, 4001, "권한이 없습니다."),

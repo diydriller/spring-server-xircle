@@ -4,7 +4,7 @@ import jakarta.persistence.*
 
 @Entity
 class Interest(
-    title: String
+    val title: String
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
