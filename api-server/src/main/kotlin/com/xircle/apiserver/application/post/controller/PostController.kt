@@ -2,11 +2,13 @@ package com.xircle.apiserver.application.post.controller
 
 import com.xircle.apiserver.application.post.dto.CreatePostRequest
 import com.xircle.apiserver.application.post.dto.GetPostResponse
+import com.xircle.apiserver.application.post.dto.GetProfilePostItem
 import com.xircle.apiserver.extension.toPostInfo
 import com.xircle.apiserver.security.MemberDetails
 import com.xircle.common.response.BaseResponse
 import com.xircle.common.response.BaseResponseStatus
 import com.xircle.core.domain.post.service.PostService
+import jakarta.validation.constraints.NotEmpty
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -47,5 +49,20 @@ class PostController(private val postService: PostService) {
             )
         }
         return ResponseEntity.ok().body(BaseResponse(postResponse))
+    }
+
+    @GetMapping("/member/{memberId}/profile/post")
+    fun getPostByMemberProfile(
+        @RequestParam(value = "page", defaultValue = "0") page: Int,
+        @RequestParam(value = "size", defaultValue = "10") size: Int,
+        @PathVariable memberId: Long,
+        @NotEmpty(message = "hashtag is empty")
+        @RequestParam(value = "hashtag") hashtag: String
+    ): ResponseEntity<BaseResponse<List<GetProfilePostItem>>> {
+        val postList = postService.getProfilePostByMember(page, size, memberId, hashtag)
+        val profilePostList = postList.map {
+            GetProfilePostItem(it.title, it.postImgSrc)
+        }
+        return ResponseEntity.ok().body(BaseResponse(profilePostList))
     }
 }

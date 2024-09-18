@@ -28,4 +28,9 @@ class PostService(private val postStore: PostStore) {
     fun getPostByMember(page: Int, size: Int, memberId: Long): List<Post> {
         return postStore.findPostByMember(page, size, memberId)
     }
+
+    @Transactional
+    fun getProfilePostByMember(page: Int, size: Int, memberId: Long, hashtag: String): List<Post> {
+        return postStore.findProfilePostByMember(page, size, memberId, hashtag)
+    }
 }
