@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface PostJpaRepository : JpaRepository<Post, Long> {
-    @Query("SELECT DISTINCT p FROM Post p JOIN FETCH p.hashtagList WHERE p.memberId = :memberId")
+    @Query("SELECT p FROM Post p WHERE p.memberId = :memberId")
     fun findPostByMember(@Param("memberId") memberId: Long, pageable: Pageable): List<Post>
 
     @Query("SELECT DISTINCT p FROM Post p JOIN p.hashtagList h WHERE p.memberId = :memberId AND h.name LIKE %:hashtag%")

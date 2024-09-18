@@ -14,7 +14,7 @@ class PostStore(private val postJpaRepository: PostJpaRepository) {
     }
 
     fun findPostByMember(page: Int, size: Int, memberId: Long): List<Post> {
-        val pageable: Pageable = PageRequest.of(page, size)
+        val pageable: Pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt")
         return postJpaRepository.findPostByMember(memberId, pageable)
     }
 

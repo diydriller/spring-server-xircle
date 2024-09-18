@@ -1,11 +1,13 @@
 package com.xircle.core.domain.post.service
 
+import com.xircle.core.domain.post.dto.GetPostInfo
 import com.xircle.core.domain.post.dto.PostInfo
 import com.xircle.core.domain.post.model.Hashtag
 import com.xircle.core.domain.post.model.Post
 import com.xircle.core.store.post.PostStore
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 
 @Service
 class PostService(private val postStore: PostStore) {
@@ -25,8 +27,17 @@ class PostService(private val postStore: PostStore) {
     }
 
     @Transactional
-    fun getPostByMember(page: Int, size: Int, memberId: Long): List<Post> {
-        return postStore.findPostByMember(page, size, memberId)
+    fun getPostByMember(page: Int, size: Int, memberId: Long): List<GetPostInfo> {
+        return postStore.findPostByMember(page, size, memberId).map {
+            GetPostInfo(
+                it.id as Long,
+                it.title,
+                it.content,
+                it.postImgSrc,
+                it.createdAt as LocalDateTime,
+                it.hashtagList.map { hashtag -> hashtag.name }
+            )
+        }
     }
 
     @Transactional

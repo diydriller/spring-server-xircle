@@ -1,8 +1,8 @@
-package com.xircle.apiserver.application.post.dto
+package com.xircle.core.domain.post.dto
 
 import java.time.LocalDateTime
 
-data class GetPostResponse(
+data class GetPostInfo(
     val id: Long,
     val title: String,
     val content: String,

@@ -2,6 +2,7 @@ package com.xircle.core.domain.post.model
 
 import com.xircle.core.domain.common.model.BaseEntity
 import jakarta.persistence.*
+import org.hibernate.annotations.BatchSize
 
 @Entity
 class Post(
@@ -15,6 +16,7 @@ class Post(
     @Column(name = "post_id")
     var id: Long? = null
 
+    @BatchSize(size = 10)
     @OneToMany(mappedBy = "post", cascade = [CascadeType.PERSIST])
     val hashtagList: MutableList<Hashtag> = ArrayList()
 
