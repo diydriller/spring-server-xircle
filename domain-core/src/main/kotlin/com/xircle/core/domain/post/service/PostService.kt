@@ -17,10 +17,15 @@ class PostService(private val postStore: PostStore) {
             postImgSrc = "",
             memberId = postInfo.memberId
         )
-        postInfo.hashtagList.forEach{
+        postInfo.hashtagList.forEach {
             val hashtag = Hashtag(it)
             post.addHashtag(hashtag)
         }
         postStore.savePost(post)
+    }
+
+    @Transactional
+    fun getPostByMember(page: Int, size: Int, memberId: Long): List<Post> {
+        return postStore.findPostByMember(page, size, memberId)
     }
 }
