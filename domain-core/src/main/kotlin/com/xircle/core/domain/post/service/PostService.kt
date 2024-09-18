@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
 @Service
-class PostService(private val postStore: PostStore) {
+class PostService(
+    private val postStore: PostStore
+) {
     @Transactional
     fun createPost(postInfo: PostInfo) {
         val post = Post(
@@ -43,5 +45,19 @@ class PostService(private val postStore: PostStore) {
     @Transactional
     fun getProfilePostByMember(page: Int, size: Int, memberId: Long, hashtag: String): List<Post> {
         return postStore.findProfilePostByMember(page, size, memberId, hashtag)
+    }
+
+    @Transactional
+    fun getFollowPost(page: Int, size: Int, memberId: Long): List<GetPostInfo> {
+        return postStore.findFollowPostByMember(page, size, memberId).map {
+            GetPostInfo(
+                it.id as Long,
+                it.title,
+                it.content,
+                it.postImgSrc,
+                it.createdAt as LocalDateTime,
+                it.hashtagList.map { hashtag -> hashtag.name }
+            )
+        }
     }
 }

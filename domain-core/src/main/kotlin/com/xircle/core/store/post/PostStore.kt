@@ -22,4 +22,9 @@ class PostStore(private val postJpaRepository: PostJpaRepository) {
         val pageable: Pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt")
         return postJpaRepository.findProfilePostByMember(memberId, hashtag, pageable)
     }
+
+    fun findFollowPostByMember(page: Int, size: Int, memberId: Long): List<Post> {
+        val pageable: Pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt")
+        return postJpaRepository.findFollowPostByMember(memberId, pageable)
+    }
 }

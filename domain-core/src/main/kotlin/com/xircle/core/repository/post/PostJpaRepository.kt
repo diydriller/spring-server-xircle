@@ -18,4 +18,13 @@ interface PostJpaRepository : JpaRepository<Post, Long> {
         @Param("hashtag") hashtag: String,
         pageable: Pageable
     ): List<Post>
+
+    @Query(
+        "SELECT p FROM Post p JOIN FollowerFollowee f ON p.memberId = f.followee.id " +
+                "WHERE f.follower.id = :memberId"
+    )
+    fun findFollowPostByMember(
+        @Param("memberId") memberId: Long,
+        pageable: Pageable
+    ): List<Post>
 }

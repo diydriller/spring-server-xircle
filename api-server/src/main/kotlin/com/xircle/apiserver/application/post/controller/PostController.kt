@@ -50,4 +50,14 @@ class PostController(private val postService: PostService) {
         }
         return ResponseEntity.ok().body(BaseResponse(profilePostList))
     }
+
+    @GetMapping("/follow/post")
+    fun getFollowPost(
+        @RequestParam(value = "page", defaultValue = "0") page: Int,
+        @RequestParam(value = "size", defaultValue = "10") size: Int,
+        @AuthenticationPrincipal memberDetails: MemberDetails
+    ): ResponseEntity<BaseResponse<List<GetPostInfo>>> {
+        val getFollowPostInfoList = postService.getFollowPost(page, size, memberDetails.getId() as Long)
+        return ResponseEntity.ok().body(BaseResponse(getFollowPostInfoList))
+    }
 }
