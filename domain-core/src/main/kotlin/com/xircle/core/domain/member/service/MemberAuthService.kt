@@ -17,9 +17,6 @@ class MemberAuthService(
     @Transactional
     fun signUp(memberInfo: MemberInfo) {
         val encodedPassword: String = passwordEncoder.encode(memberInfo.password)
-
-        val interestList = memberInfo.interestList.map { Interest(it) }.toList()
-
         val member = Member(
             age = memberInfo.age,
             modifier = memberInfo.modifier,
@@ -41,8 +38,10 @@ class MemberAuthService(
             latitude = memberInfo.latitude,
             longitude = memberInfo.longitude,
             role = MemberRole.MEMBER,
-            interestList = interestList,
         )
+        memberInfo.interestList.forEach{
+            member.addInterest(Interest(it))
+        }
         memberStore.saveMember(member)
     }
 }

@@ -30,12 +30,18 @@ class Member(
     var longitude: Double?,
     var latitude: Double?,
     @Enumerated(EnumType.STRING)
-    var role: MemberRole,
-    @OneToMany(mappedBy = "member", cascade = [CascadeType.ALL])
-    val interestList: List<Interest> = ArrayList()
+    var role: MemberRole
 ) : BaseEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
-    var id: Long? = null;
+    var id: Long? = null
+
+    @OneToMany(mappedBy = "member", cascade = [CascadeType.PERSIST])
+    var interestList: MutableList<Interest> = ArrayList()
+
+    fun addInterest(interest: Interest) {
+        interestList.add(interest)
+        interest.member = this
+    }
 }

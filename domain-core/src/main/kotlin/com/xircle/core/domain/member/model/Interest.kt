@@ -13,10 +13,5 @@ class Interest(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private val member: Member? = null
-
-    fun createInterest(title: String): Interest {
-        val interest = Interest(title = title)
-        return interest
-    }
+    var member: Member? = null
 }
