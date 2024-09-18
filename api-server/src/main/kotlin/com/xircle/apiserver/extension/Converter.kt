@@ -1,7 +1,9 @@
 package com.xircle.apiserver.extension
 
 import com.xircle.apiserver.application.member.dto.SignUpRequest
+import com.xircle.apiserver.application.post.dto.CreatePostRequest
 import com.xircle.core.domain.member.dto.MemberInfo
+import com.xircle.core.domain.post.dto.PostInfo
 
 fun SignUpRequest.toMemberInfo(): MemberInfo {
     return MemberInfo(
@@ -25,5 +27,15 @@ fun SignUpRequest.toMemberInfo(): MemberInfo {
         longitude = this.longitude,
         interestList = this.interestList,
         profileImg = this.profileImg,
+    )
+}
+
+fun CreatePostRequest.toPostInfo(memberId: Long): PostInfo {
+    return PostInfo(
+        title = this.title,
+        content = this.content,
+        hashtagList = this.hashtagList,
+        postImg = this.postImg,
+        memberId = memberId
     )
 }
