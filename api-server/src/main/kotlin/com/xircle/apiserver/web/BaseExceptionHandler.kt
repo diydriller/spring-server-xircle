@@ -1,6 +1,7 @@
 package com.xircle.apiserver.web
 
 import com.xircle.common.exception.ConflictException
+import com.xircle.common.exception.NotFoundException
 import com.xircle.common.exception.ServerErrorException
 import com.xircle.common.response.BaseResponse
 import org.springframework.http.HttpStatus
@@ -38,10 +39,22 @@ class BaseExceptionHandler {
         )
     }
 
+    @ExceptionHandler(NotFoundException::class)
+    @ResponseBody
+    fun handleNotFoundException(ex: NotFoundException): ResponseEntity<BaseResponse<Any>> {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+            BaseResponse(
+                isSuccess = false,
+                message = ex.status.message,
+                code = ex.status.code
+            )
+        )
+    }
+
     @ExceptionHandler(ServerErrorException::class)
     @ResponseBody
     fun handleServerErrorException(ex: ServerErrorException): ResponseEntity<BaseResponse<Any>> {
-        return ResponseEntity.internalServerError().body(
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
             BaseResponse(
                 isSuccess = false,
                 message = ex.status.message,

@@ -1,6 +1,6 @@
 package com.xircle.core.store.member
 
-import com.xircle.common.exception.ConflictException
+import com.xircle.common.exception.NotFoundException
 import com.xircle.common.response.BaseResponseStatus
 import com.xircle.core.domain.member.dto.MemberSearchCondition
 import com.xircle.core.domain.member.model.FollowerFollowee
@@ -16,11 +16,11 @@ import org.springframework.stereotype.Component
 @Component
 class MemberStore(
     private val memberJpaRepository: MemberJpaRepository,
-    private val followerFolloweeJpaRepository: FollowerFolloweeJpaRepository
+    private val followerFolloweeJpaRepository: FollowerFolloweeJpaRepository,
 ) {
     fun findMemberByEmail(email: String): Member {
         return memberJpaRepository.findMemberByEmail(email)
-            ?: throw ConflictException(BaseResponseStatus.NOT_EXIST_EMAIL)
+            ?: throw NotFoundException(BaseResponseStatus.NOT_EXIST_EMAIL)
     }
 
     fun saveMember(member: Member): Member {
@@ -28,7 +28,7 @@ class MemberStore(
     }
 
     fun findMemberById(id: Long): Member {
-        return memberJpaRepository.findMemberById(id) ?: throw ConflictException(BaseResponseStatus.NOT_EXIST_EMAIL)
+        return memberJpaRepository.findMemberById(id) ?: throw NotFoundException(BaseResponseStatus.NOT_EXIST_EMAIL)
     }
 
     fun findFollow(me: Member, other: Member): FollowerFollowee? {
@@ -39,7 +39,12 @@ class MemberStore(
         followerFolloweeJpaRepository.save(followerFollowee)
     }
 
-    fun findMemberByCondition(page: Int, size: Int, userId: Long, memberSearchCondition: MemberSearchCondition): List<Member> {
+    fun findMemberByCondition(
+        page: Int,
+        size: Int,
+        userId: Long,
+        memberSearchCondition: MemberSearchCondition
+    ): List<Member> {
         val pageable: Pageable = PageRequest.of(page, size)
         val searchSpecification = listOfNotNull(
             MemberSpecification.notEqualId(userId),
@@ -51,6 +56,7 @@ class MemberStore(
     }
 
     fun findMemberProfileById(memberId: Long): Member {
-        return memberJpaRepository.findMemberProfileById(memberId) ?: throw ConflictException(BaseResponseStatus.NOT_EXIST_MEMBER)
+        return memberJpaRepository.findMemberProfileById(memberId)
+            ?: throw NotFoundException(BaseResponseStatus.NOT_EXIST_MEMBER)
     }
 }
