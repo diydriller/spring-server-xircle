@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service
 class FollowManagementService(
     private val memberStore: MemberStore,
 ) {
-    fun followMember(email: String, memberId: Long): Boolean {
-        val me = memberStore.findMemberByEmail(email)
-        val other = memberStore.findMemberById(memberId)
+    fun followMember(myId: Long, otherId: Long): Boolean {
+        val me = memberStore.findMemberById(myId)
+        val other = memberStore.findMemberById(otherId)
         var isFollowing = false
         memberStore.findFollow(me, other)?.let {
             it.isDeleted = !it.isDeleted
