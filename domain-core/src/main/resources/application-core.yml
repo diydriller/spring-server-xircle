@@ -11,3 +11,7 @@ spring:
     properties:
       hibernate:
         dialect:  org.hibernate.dialect.MySQLDialect
+redis:
+  port: 6300
+  host: localhost
+  password: redis_source
