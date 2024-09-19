@@ -31,7 +31,6 @@ class SecurityConfig(
     @Bean
     fun filterChain(http: HttpSecurity, authenticationManager: AuthenticationManager): SecurityFilterChain {
         http
-            .addFilter(corsFilter())
             .csrf {
                 it.disable()
             }.sessionManagement {
