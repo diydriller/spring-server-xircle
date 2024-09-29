@@ -8,6 +8,7 @@ import com.xircle.common.response.BaseResponse
 import com.xircle.common.response.BaseResponseStatus
 import com.xircle.core.domain.post.dto.GetPostInfo
 import com.xircle.core.domain.post.service.PostService
+import jakarta.validation.Valid
 import jakarta.validation.constraints.NotEmpty
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.*
 class PostController(private val postService: PostService) {
     @PostMapping("/post", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     fun createPost(
-        request: CreatePostRequest,
+        @Valid request: CreatePostRequest,
         @AuthenticationPrincipal memberDetails: MemberDetails
     ): ResponseEntity<BaseResponse<Any>> {
         val postInfo = request.toPostInfo(memberDetails.getId() as Long)

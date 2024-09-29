@@ -23,8 +23,8 @@ class BaseExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException::class)
     @ResponseBody
     fun handleValidationException(ex: MethodArgumentNotValidException): ResponseEntity<BaseResponse<Any>> {
-        val errorMessage = "bad request"
-        return ResponseEntity.badRequest().body(BaseResponse(isSuccess = false, message = errorMessage, code = 4000))
+        val message = ex.bindingResult.fieldErrors.joinToString(", ") { it.defaultMessage ?: "" }
+        return ResponseEntity.badRequest().body(BaseResponse(isSuccess = false, message = message, code = 4000))
     }
 
     @ExceptionHandler(ConflictException::class)
