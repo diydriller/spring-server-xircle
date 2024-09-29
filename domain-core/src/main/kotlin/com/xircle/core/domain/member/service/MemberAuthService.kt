@@ -16,6 +16,8 @@ class MemberAuthService(
 ) {
     @Transactional
     fun signUp(memberInfo: MemberInfo) {
+        memberStore.isExistMemberByEmail(memberInfo.email)
+
         val encodedPassword: String = passwordEncoder.encode(memberInfo.password)
         val member = Member(
             age = memberInfo.age,
@@ -39,7 +41,7 @@ class MemberAuthService(
             longitude = memberInfo.longitude,
             role = MemberRole.MEMBER,
         )
-        memberInfo.interestList.forEach{
+        memberInfo.interestList.forEach {
             member.addInterest(Interest(it))
         }
         memberStore.saveMember(member)

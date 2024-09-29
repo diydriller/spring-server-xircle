@@ -1,5 +1,6 @@
 package com.xircle.core.store.member
 
+import com.xircle.common.exception.ConflictException
 import com.xircle.common.exception.NotFoundException
 import com.xircle.common.response.BaseResponseStatus
 import com.xircle.core.domain.member.dto.MemberSearchCondition
@@ -21,6 +22,12 @@ class MemberStore(
     fun findMemberByEmail(email: String): Member {
         return memberJpaRepository.findMemberByEmail(email)
             ?: throw NotFoundException(BaseResponseStatus.NOT_EXIST_EMAIL)
+    }
+
+    fun isExistMemberByEmail(email: String) {
+        memberJpaRepository.findMemberByEmail(email)?.let{
+            throw ConflictException(BaseResponseStatus.ALREADY_EXIST_EMAIL)
+        }
     }
 
     fun saveMember(member: Member): Member {
