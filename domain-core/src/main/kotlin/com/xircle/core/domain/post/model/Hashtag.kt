@@ -1,5 +1,6 @@
 package com.xircle.core.domain.post.model
 
+import com.fasterxml.jackson.annotation.JsonBackReference
 import com.xircle.core.domain.common.model.BaseEntity
 import jakarta.persistence.*
 
@@ -12,6 +13,7 @@ class Hashtag(
     @Column(name = "hashtag_id")
     var id: Long? = null
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     var post: Post? = null
