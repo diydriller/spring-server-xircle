@@ -27,4 +27,10 @@ interface PostJpaRepository : JpaRepository<Post, Long> {
         @Param("memberId") memberId: Long,
         pageable: Pageable
     ): List<Post>
+
+    @Query("SELECT p FROM Post p WHERE p.id IN :postIdList AND p.isDeleted = :isDeleted")
+    fun findAllByIsDeletedAndIdIn(
+        @Param("isDeleted") isDeleted: Boolean,
+        @Param("postIdList") postIdList: List<Long>
+    ): List<Post>
 }

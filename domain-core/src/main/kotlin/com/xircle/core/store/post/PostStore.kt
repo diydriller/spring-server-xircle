@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component
 
 @Component
 class PostStore(private val postJpaRepository: PostJpaRepository) {
-    fun savePost(post: Post) {
-        postJpaRepository.save(post)
+    fun savePost(post: Post): Post {
+        return postJpaRepository.save(post)
     }
 
     fun findPostByMember(page: Int, size: Int, memberId: Long): List<Post> {
