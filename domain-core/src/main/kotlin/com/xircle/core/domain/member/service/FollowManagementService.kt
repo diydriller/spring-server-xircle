@@ -1,5 +1,6 @@
 package com.xircle.core.domain.member.service
 
+import com.xircle.core.domain.member.cache.UpdateFollowManagementCache
 import com.xircle.core.domain.member.model.FollowerFollowee
 import com.xircle.core.store.member.MemberStore
 import org.springframework.stereotype.Service
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service
 class FollowManagementService(
     private val memberStore: MemberStore,
 ) {
+    @UpdateFollowManagementCache
     fun followMember(myId: Long, otherId: Long): Boolean {
         val me = memberStore.findMemberById(myId)
         val other = memberStore.findMemberById(otherId)
