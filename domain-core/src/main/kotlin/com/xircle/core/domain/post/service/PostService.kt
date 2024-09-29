@@ -1,5 +1,7 @@
 package com.xircle.core.domain.post.service
 
+import com.xircle.core.domain.post.cache.GetPostCache
+import com.xircle.core.domain.post.cache.UpdatePostCache
 import com.xircle.core.domain.post.dto.GetPostInfo
 import com.xircle.core.domain.post.dto.PostInfo
 import com.xircle.core.domain.post.model.Hashtag
@@ -13,8 +15,9 @@ import java.time.LocalDateTime
 class PostService(
     private val postStore: PostStore
 ) {
+    @UpdatePostCache
     @Transactional
-    fun createPost(postInfo: PostInfo) {
+    fun createPost(postInfo: PostInfo): Post {
         val post = Post(
             title = postInfo.title,
             content = postInfo.content,
@@ -25,7 +28,7 @@ class PostService(
             val hashtag = Hashtag(it)
             post.addHashtag(hashtag)
         }
-        postStore.savePost(post)
+        return postStore.savePost(post)
     }
 
     @Transactional
@@ -47,6 +50,7 @@ class PostService(
         return postStore.findProfilePostByMember(page, size, memberId, hashtag)
     }
 
+    @GetPostCache
     @Transactional
     fun getFollowPost(page: Int, size: Int, memberId: Long): List<GetPostInfo> {
         return postStore.findFollowPostByMember(page, size, memberId).map {
