@@ -9,6 +9,7 @@ import com.xircle.common.response.BaseResponseStatus
 import com.xircle.core.domain.post.dto.GetPostInfo
 import com.xircle.core.domain.post.service.PostService
 import jakarta.validation.Valid
+import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.NotEmpty
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -31,6 +32,7 @@ class PostController(private val postService: PostService) {
     fun getPostByMember(
         @RequestParam(value = "page", defaultValue = "0") page: Int,
         @RequestParam(value = "size", defaultValue = "10") size: Int,
+        @Min(value = 1, message = "id must greater than 0")
         @PathVariable memberId: Long
     ): ResponseEntity<BaseResponse<List<GetPostInfo>>> {
         val getPostInfoList = postService.getPostByMember(page, size, memberId)
@@ -41,6 +43,7 @@ class PostController(private val postService: PostService) {
     fun getPostByMemberProfile(
         @RequestParam(value = "page", defaultValue = "0") page: Int,
         @RequestParam(value = "size", defaultValue = "10") size: Int,
+        @Min(value = 1, message = "id must greater than 0")
         @PathVariable memberId: Long,
         @NotEmpty(message = "hashtag is empty")
         @RequestParam(value = "hashtag") hashtag: String

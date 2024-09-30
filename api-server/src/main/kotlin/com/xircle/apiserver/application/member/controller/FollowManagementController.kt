@@ -4,6 +4,7 @@ import com.xircle.apiserver.security.MemberDetails
 import com.xircle.common.response.BaseResponse
 import com.xircle.common.response.BaseResponseStatus
 import com.xircle.core.domain.member.service.FollowManagementService
+import jakarta.validation.constraints.Min
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.PatchMapping
@@ -17,6 +18,7 @@ class FollowManagementController(
     @PatchMapping("/follow/{memberId}")
     fun followMember(
         @AuthenticationPrincipal memberDetails: MemberDetails,
+        @Min(value = 1, message = "id must greater than 0")
         @PathVariable("memberId") memberId: Long
     ): ResponseEntity<BaseResponse<Unit>> {
         val isFollowing = followManagementService.followMember(memberDetails.getId() as Long, memberId)

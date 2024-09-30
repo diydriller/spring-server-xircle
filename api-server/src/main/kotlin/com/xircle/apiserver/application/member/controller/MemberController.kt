@@ -1,11 +1,13 @@
 package com.xircle.apiserver.application.member.controller
 
+import com.xircle.apiserver.application.member.dto.MemberProfile
 import com.xircle.apiserver.application.member.dto.MemberSearchResponse
 import com.xircle.apiserver.security.MemberDetails
 import com.xircle.common.response.BaseResponse
-import com.xircle.apiserver.application.member.dto.MemberProfile
 import com.xircle.core.domain.member.dto.MemberSearchCondition
 import com.xircle.core.domain.member.service.MemberService
+import jakarta.validation.constraints.Min
+import jakarta.validation.constraints.Pattern
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
@@ -19,8 +21,11 @@ class MemberController(private val memberService: MemberService) {
     fun searchMember(
         @RequestParam(name = "page", defaultValue = "0") page: Int,
         @RequestParam(name = "size", defaultValue = "10") size: Int,
+        @Min(value = 1, message = "age must greater than 0")
         @RequestParam(value = "age", required = false) age: Int?,
+        @Pattern(regexp = "^(서울대학교|고려대학교|연세대학교)$", message = "university must be either 서울대학교 or 고려대학교 or 연세대학교")
         @RequestParam(value = "university", required = false) university: String?,
+        @Pattern(regexp = "^(남자|여자)$", message = "gender must be either 남자 or 여자")
         @RequestParam(value = "gender", required = false) gender: String?,
         @AuthenticationPrincipal memberDetails: MemberDetails
     ): ResponseEntity<BaseResponse<List<MemberSearchResponse>>> {
@@ -35,6 +40,7 @@ class MemberController(private val memberService: MemberService) {
 
     @GetMapping("/profile/member/{memberId}")
     fun getMemberProfile(
+        @Min(value = 1, message = "id must greater than 0")
         @PathVariable memberId: Long,
     ): ResponseEntity<BaseResponse<MemberProfile>> {
         val member = memberService.getMemberProfile(memberId)

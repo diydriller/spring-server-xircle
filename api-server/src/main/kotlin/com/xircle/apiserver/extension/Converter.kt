@@ -26,7 +26,7 @@ fun SignUpRequest.toMemberInfo(): MemberInfo {
         latitude = this.latitude,
         longitude = this.longitude,
         interestList = this.interestList,
-        profileImg = this.profileImg,
+        profileImg = this.profileImg!!,
     )
 }
 

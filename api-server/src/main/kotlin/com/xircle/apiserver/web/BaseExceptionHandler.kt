@@ -7,24 +7,26 @@ import com.xircle.common.response.BaseResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
-import org.springframework.web.bind.MissingServletRequestParameterException
-import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.web.bind.annotation.ResponseStatus
+import org.springframework.web.bind.annotation.RestControllerAdvice
+import org.springframework.web.method.annotation.HandlerMethodValidationException
 
-@ControllerAdvice
+@RestControllerAdvice
 class BaseExceptionHandler {
-    @ExceptionHandler(MissingServletRequestParameterException::class)
-    fun handleMissingParams(ex: MissingServletRequestParameterException): ResponseEntity<BaseResponse<Any>> {
-        val errorMessage = "missing parameter: ${ex.parameterName}"
-        return ResponseEntity.badRequest().body(BaseResponse(isSuccess = false, message = errorMessage, code = 4000))
+    @ExceptionHandler(HandlerMethodValidationException::class)
+    @ResponseStatus
+    fun handlerMethodValidationException(ex: HandlerMethodValidationException): ResponseEntity<BaseResponse<Any>> {
+        val messages = ex.allErrors.map { it.defaultMessage }.joinToString(", ")
+        return ResponseEntity.badRequest().body(BaseResponse(isSuccess = false, message = messages, code = 4000))
     }
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
     @ResponseBody
     fun handleValidationException(ex: MethodArgumentNotValidException): ResponseEntity<BaseResponse<Any>> {
-        val message = ex.bindingResult.fieldErrors.joinToString(", ") { it.defaultMessage ?: "" }
-        return ResponseEntity.badRequest().body(BaseResponse(isSuccess = false, message = message, code = 4000))
+        val messages = ex.bindingResult.fieldErrors.map { it.defaultMessage }.joinToString(", ")
+        return ResponseEntity.badRequest().body(BaseResponse(isSuccess = false, message = messages, code = 4000))
     }
 
     @ExceptionHandler(ConflictException::class)
