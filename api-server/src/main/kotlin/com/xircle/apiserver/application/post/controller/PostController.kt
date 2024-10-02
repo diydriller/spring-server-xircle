@@ -3,7 +3,6 @@ package com.xircle.apiserver.application.post.controller
 import com.xircle.apiserver.application.post.dto.CreatePostRequest
 import com.xircle.apiserver.application.post.dto.GetProfilePostItem
 import com.xircle.apiserver.extension.toPostInfo
-import com.xircle.apiserver.security.MemberDetails
 import com.xircle.common.response.BaseResponse
 import com.xircle.common.response.BaseResponseStatus
 import com.xircle.core.domain.post.dto.GetPostInfo
@@ -13,17 +12,17 @@ import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.NotEmpty
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
-import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
+@RequestMapping("/api")
 @RestController
 class PostController(private val postService: PostService) {
     @PostMapping("/post", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     fun createPost(
         @Valid request: CreatePostRequest,
-        @AuthenticationPrincipal memberDetails: MemberDetails
+        @RequestHeader("memberId") myId: String
     ): ResponseEntity<BaseResponse<Any>> {
-        val postInfo = request.toPostInfo(memberDetails.getId() as Long)
+        val postInfo = request.toPostInfo(myId.toLong())
         postService.createPost(postInfo)
         return ResponseEntity.ok().body(BaseResponse(BaseResponseStatus.SUCCESS))
     }
@@ -59,9 +58,9 @@ class PostController(private val postService: PostService) {
     fun getFollowPost(
         @RequestParam(value = "page", defaultValue = "0") page: Int,
         @RequestParam(value = "size", defaultValue = "10") size: Int,
-        @AuthenticationPrincipal memberDetails: MemberDetails
+        @RequestHeader(value = "memberId") myId: String
     ): ResponseEntity<BaseResponse<List<GetPostInfo>>> {
-        val getFollowPostInfoList = postService.getFollowPost(page, size, memberDetails.getId() as Long)
+        val getFollowPostInfoList = postService.getFollowPost(page, size, myId.toLong())
         return ResponseEntity.ok().body(BaseResponse(getFollowPostInfoList))
     }
 }

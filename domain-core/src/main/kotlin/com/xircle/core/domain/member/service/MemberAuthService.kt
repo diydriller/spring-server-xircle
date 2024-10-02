@@ -1,5 +1,7 @@
 package com.xircle.core.domain.member.service
 
+import com.xircle.common.exception.NotFoundException
+import com.xircle.common.response.BaseResponseStatus
 import com.xircle.core.domain.member.dto.MemberInfo
 import com.xircle.core.domain.member.model.Interest
 import com.xircle.core.domain.member.model.Member
@@ -45,5 +47,13 @@ class MemberAuthService(
             member.addInterest(Interest(it))
         }
         memberStore.saveMember(member)
+    }
+
+    fun login(email: String, password: String): Member {
+        val member = memberStore.findMemberByEmail(email)
+        if (!passwordEncoder.matches(password, member.password)) {
+            throw NotFoundException(BaseResponseStatus.NOT_EQUAL_PASSWORD)
+        }
+        return member
     }
 }

@@ -1,6 +1,6 @@
 spring:
   application:
-    name: API
+    name: API-SERVICE
 
   profiles:
     active: local

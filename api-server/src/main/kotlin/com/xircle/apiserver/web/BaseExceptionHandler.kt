@@ -4,9 +4,11 @@ import com.xircle.common.exception.ConflictException
 import com.xircle.common.exception.NotFoundException
 import com.xircle.common.exception.ServerErrorException
 import com.xircle.common.response.BaseResponse
+import com.xircle.common.response.BaseResponseStatus
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
+import org.springframework.web.bind.MissingRequestHeaderException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -19,14 +21,34 @@ class BaseExceptionHandler {
     @ResponseStatus
     fun handlerMethodValidationException(ex: HandlerMethodValidationException): ResponseEntity<BaseResponse<Any>> {
         val messages = ex.allErrors.map { it.defaultMessage }.joinToString(", ")
-        return ResponseEntity.badRequest().body(BaseResponse(isSuccess = false, message = messages, code = 4000))
+        return ResponseEntity.badRequest().body(
+            BaseResponse(
+                isSuccess = false,
+                message = messages,
+                code = 4000
+            )
+        )
     }
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
     @ResponseBody
     fun handleValidationException(ex: MethodArgumentNotValidException): ResponseEntity<BaseResponse<Any>> {
         val messages = ex.bindingResult.fieldErrors.map { it.defaultMessage }.joinToString(", ")
-        return ResponseEntity.badRequest().body(BaseResponse(isSuccess = false, message = messages, code = 4000))
+        return ResponseEntity.badRequest().body(
+            BaseResponse(
+                isSuccess = false,
+                message = messages,
+                code = 4000
+            )
+        )
+    }
+
+    @ExceptionHandler(MissingRequestHeaderException::class)
+    @ResponseBody
+    fun handleMissingRequestHeaderException(ex: MissingRequestHeaderException): ResponseEntity<BaseResponse<Any>> {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+            BaseResponse(BaseResponseStatus.AUTHENTICATION_ERROR)
+        )
     }
 
     @ExceptionHandler(ConflictException::class)
