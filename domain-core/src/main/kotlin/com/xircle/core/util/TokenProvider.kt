@@ -1,4 +1,4 @@
-package com.xircle.apiserver.web
+package com.xircle.core.util
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWT.decode

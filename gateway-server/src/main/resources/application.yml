@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: GATEWAY-SERVICE
+
+  profiles:
+    active: local
+
+server:
+  port: 8765
+
