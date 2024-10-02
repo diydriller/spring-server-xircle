@@ -6,8 +6,8 @@ import org.springframework.context.annotation.PropertySource
 @Configuration
 @PropertySource(
     value = [
-        "application-core.yml",
-        "application-core-\${spring.profiles.active}.yml"
+        "classpath:application-core.yml",
+        "classpath:application-core-\${spring.profiles.active}.yml"
     ], factory = YamlLoadFactory::class
 )
 class PropertiesConfig

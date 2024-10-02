@@ -2,19 +2,15 @@ package com.xircle.apiserver.application.member.controller
 
 import com.xircle.apiserver.application.member.dto.MemberProfile
 import com.xircle.apiserver.application.member.dto.MemberSearchResponse
-import com.xircle.apiserver.security.MemberDetails
 import com.xircle.common.response.BaseResponse
 import com.xircle.core.domain.member.dto.MemberSearchCondition
 import com.xircle.core.domain.member.service.MemberService
 import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.Pattern
 import org.springframework.http.ResponseEntity
-import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
+@RequestMapping("/api")
 @RestController
 class MemberController(private val memberService: MemberService) {
     @GetMapping("/profile/member")
@@ -27,11 +23,11 @@ class MemberController(private val memberService: MemberService) {
         @RequestParam(value = "university", required = false) university: String?,
         @Pattern(regexp = "^(남자|여자)$", message = "gender must be either 남자 or 여자")
         @RequestParam(value = "gender", required = false) gender: String?,
-        @AuthenticationPrincipal memberDetails: MemberDetails
+        @RequestHeader("memberId") myId: String
     ): ResponseEntity<BaseResponse<List<MemberSearchResponse>>> {
         val searchCondition = MemberSearchCondition(age, university, gender)
         val searchMemberResponseList =
-            memberService.searchMember(page, size, memberDetails.getId() as Long, searchCondition)
+            memberService.searchMember(page, size, myId.toLong(), searchCondition)
                 .map {
                     MemberSearchResponse(it.id as Long, it.nickname)
                 }

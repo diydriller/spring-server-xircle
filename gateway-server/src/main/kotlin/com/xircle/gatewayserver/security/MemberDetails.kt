@@ -1,4 +1,4 @@
-package com.xircle.apiserver.security
+package com.xircle.gatewayserver.security
 
 import com.xircle.core.domain.member.model.Member
 import org.springframework.security.core.GrantedAuthority
