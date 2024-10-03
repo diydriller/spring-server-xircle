@@ -13,5 +13,11 @@ class StringUtil {
         fun getPostKey(memberId: Long): String {
             return "member:\"$memberId\":posts"
         }
+
+        const val CHANNEL_PREFIX = "sample:topics:"
+
+        fun getChannelName(memberId: String): String {
+            return "$CHANNEL_PREFIX$memberId"
+        }
     }
 }
