@@ -1,6 +1,9 @@
-server:
-  port: 8090
-
 spring:
+  application:
+    name: NOTIFICATION-SERVICE
+
   profiles:
     active: local
+
+server:
+  port: 8090
