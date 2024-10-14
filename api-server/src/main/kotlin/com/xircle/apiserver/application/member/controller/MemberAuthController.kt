@@ -4,10 +4,12 @@ import com.xircle.apiserver.application.member.dto.LoginRequest
 import com.xircle.apiserver.application.member.dto.LoginResponse
 import com.xircle.apiserver.application.member.dto.SignUpRequest
 import com.xircle.apiserver.extension.toMemberInfo
+import com.xircle.apiserver.security.MemberDetails
 import com.xircle.common.response.BaseResponse
 import com.xircle.common.response.BaseResponseStatus
 import com.xircle.core.domain.member.service.MemberAuthService
-import com.xircle.core.util.TokenProvider
+import com.xircle.common.token.TokenProvider
+import jakarta.servlet.http.HttpSession
 import jakarta.validation.Valid
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -33,10 +35,14 @@ class MemberAuthController(
     }
 
     @PostMapping("/login")
-    fun login(@RequestBody @Valid request: LoginRequest): ResponseEntity<BaseResponse<LoginResponse>> {
+    fun login(
+        @RequestBody @Valid request: LoginRequest,
+        session: HttpSession
+              ): ResponseEntity<BaseResponse<LoginResponse>> {
         val member = memberAuthService.login(request.email, request.password)
         val token = tokenProvider.createAccessToken(member.id!!)
         val response = LoginResponse(token)
+        session.setAttribute("member", MemberDetails(member))
         return ResponseEntity.ok().body(BaseResponse(response))
     }
 }

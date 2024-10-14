@@ -1,14 +1,12 @@
-package com.xircle.apiserver.web
+package com.xircle.apiserver.exception
 
 import com.xircle.common.exception.ConflictException
 import com.xircle.common.exception.NotFoundException
 import com.xircle.common.exception.ServerErrorException
 import com.xircle.common.response.BaseResponse
-import com.xircle.common.response.BaseResponseStatus
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
-import org.springframework.web.bind.MissingRequestHeaderException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -16,7 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.method.annotation.HandlerMethodValidationException
 
 @RestControllerAdvice
-class BaseExceptionHandler {
+class GlobalExceptionHandler {
     @ExceptionHandler(HandlerMethodValidationException::class)
     @ResponseStatus
     fun handlerMethodValidationException(ex: HandlerMethodValidationException): ResponseEntity<BaseResponse<Any>> {
@@ -40,14 +38,6 @@ class BaseExceptionHandler {
                 message = messages,
                 code = 4000
             )
-        )
-    }
-
-    @ExceptionHandler(MissingRequestHeaderException::class)
-    @ResponseBody
-    fun handleMissingRequestHeaderException(ex: MissingRequestHeaderException): ResponseEntity<BaseResponse<Any>> {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
-            BaseResponse(BaseResponseStatus.AUTHENTICATION_ERROR)
         )
     }
 

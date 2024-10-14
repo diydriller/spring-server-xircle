@@ -2,6 +2,7 @@ package com.xircle.core.domain.member.model
 
 import com.xircle.core.domain.common.model.BaseEntity
 import jakarta.persistence.*
+import java.io.Serializable
 
 @Entity
 class Member(
@@ -31,7 +32,7 @@ class Member(
     var latitude: Double?,
     @Enumerated(EnumType.STRING)
     var role: MemberRole
-) : BaseEntity() {
+) : BaseEntity(), Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
@@ -43,5 +44,9 @@ class Member(
     fun addInterest(interest: Interest) {
         interestList.add(interest)
         interest.member = this
+    }
+
+    companion object {
+        const val SERIAL_VERSION_UID: Long = 1L
     }
 }

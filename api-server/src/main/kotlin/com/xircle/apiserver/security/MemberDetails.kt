@@ -1,4 +1,4 @@
-package com.xircle.gatewayserver.security
+package com.xircle.apiserver.security
 
 import com.xircle.core.domain.member.model.Member
 import org.springframework.security.core.GrantedAuthority
@@ -19,10 +19,6 @@ class MemberDetails(
     }
 
     override fun getUsername(): String {
-        return member.email
-    }
-
-    fun getId(): Long? {
-        return member.id
+        return member.id.toString()
     }
 }
