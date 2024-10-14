@@ -1,4 +1,4 @@
-package com.xircle.core.util
+package com.xircle.common.token
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWT.decode

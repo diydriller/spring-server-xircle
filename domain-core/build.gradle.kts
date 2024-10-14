@@ -12,6 +12,5 @@ dependencies {
     implementation("org.springframework.security:spring-security-crypto")
     runtimeOnly("com.mysql:mysql-connector-j")
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
-    implementation("com.auth0:java-jwt:4.4.0")
     implementation("org.springframework.boot:spring-boot-starter-web")
 }
