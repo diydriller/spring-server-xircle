@@ -1,15 +1,15 @@
 package com.xircle.apiserver.security
 
-import com.xircle.core.repository.member.MemberJpaRepository
+import com.xircle.core.store.member.MemberStore
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Service
 
 @Service
 class MemberDetailsService(
-    private val memberRepository: MemberJpaRepository
+    private val memberStore: MemberStore
 ) : UserDetailsService {
-    override fun loadUserByUsername(username: String): MemberDetails? {
-        val member = memberRepository.findMemberById(username.toLong())
-        return member?.let { MemberDetails(it) }
+    override fun loadUserByUsername(username: String): MemberDetails {
+        val member = memberStore.findMemberById(username.toLong())
+        return MemberDetails(member)
     }
 }
