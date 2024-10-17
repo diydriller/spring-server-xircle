@@ -4,8 +4,8 @@ import com.xircle.common.util.StringUtil.Companion.getFolloweeKey
 import com.xircle.common.util.StringUtil.Companion.getPostKey
 import com.xircle.core.domain.post.dto.GetPostInfo
 import com.xircle.core.domain.post.model.Post
-import com.xircle.core.repository.post.PostJpaRepository
-import com.xircle.core.repository.post.PostRedisRepository
+import com.xircle.core.store.post.PostCacheStore
+import com.xircle.core.store.post.PostStore
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.Around
 import org.aspectj.lang.annotation.Aspect
@@ -15,8 +15,8 @@ import java.time.LocalDateTime
 @Aspect
 @Component
 class PostCacheAspect(
-    private val postRedisRepository: PostRedisRepository,
-    private val postJpaRepository: PostJpaRepository
+    private val postCacheStore: PostCacheStore,
+    private val postStore: PostStore
 ) {
     @Around("@annotation(UpdatePostCache) && execution(* *(..))")
     fun updatePostCache(joinPoint: ProceedingJoinPoint): Any? {
@@ -25,7 +25,7 @@ class PostCacheAspect(
 
         val followeeId = post.memberId
         val followeeKey = getFolloweeKey(followeeId)
-        postRedisRepository.updateFollowerPost(followeeKey, post.id as Long)
+        postCacheStore.updateFollowerPost(followeeKey, post.id as Long)
 
         return result
     }
@@ -35,12 +35,12 @@ class PostCacheAspect(
         val postKey = getPostKey(memberId)
         val start = page * size
         val end = start + size - 1
-        val postIdList = postRedisRepository.getPagedPostIdList(postKey, start.toLong(), end.toLong())
+        val postIdList = postCacheStore.getPagedPostIdList(postKey, start.toLong(), end.toLong())
         if (postIdList.isEmpty()) {
             return joinPoint.proceed();
         }
 
-        return postJpaRepository.findAllByIsDeletedAndIdIn(false, postIdList)
+        return postStore.findAllByIdList(postIdList)
             .map {
                 GetPostInfo(
                     it.id as Long,

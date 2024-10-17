@@ -13,6 +13,9 @@ ext {
 dependencies {
     implementation(project(":domain-core"))
     implementation(project(":common"))
+    implementation(project(":infrastructure-redis"))
+    implementation(project(":infrastructure-jpa"))
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation:3.3.3")
     implementation("com.auth0:java-jwt:4.4.0")
