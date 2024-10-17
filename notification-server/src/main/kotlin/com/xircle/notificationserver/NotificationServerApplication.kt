@@ -8,7 +8,9 @@ import org.springframework.context.annotation.ComponentScan
     basePackages = [
         "com.xircle.notificationserver",
         "com.xircle.core",
-        "com.xircle.common"
+        "com.xircle.common",
+        "com.xircle.redis",
+        "com.xircle.jpa"
     ]
 )
 @SpringBootApplication

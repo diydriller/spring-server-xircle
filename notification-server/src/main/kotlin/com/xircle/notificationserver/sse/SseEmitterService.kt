@@ -1,7 +1,7 @@
-package com.xircle.core.domain.notification.service
+package com.xircle.notificationserver.sse
 
+import com.xircle.common.util.NumberUtil.Companion.SSE_DURATION
 import com.xircle.core.domain.notification.dto.NotificationInfo
-import com.xircle.core.repository.notification.SseEmitterRepository
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter
@@ -9,7 +9,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter
 @Service
 class SseEmitterService(private val sseEmitterRepository: SseEmitterRepository) {
     fun createEmitter(emitterKey: String): SseEmitter {
-        return sseEmitterRepository.save(emitterKey, SseEmitter(10 * 60 * 1000L))
+        return sseEmitterRepository.save(emitterKey, SseEmitter(SSE_DURATION))
     }
 
     fun deleteEmitter(emitterKey: String) {

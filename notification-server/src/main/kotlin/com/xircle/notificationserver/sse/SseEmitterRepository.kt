@@ -1,4 +1,4 @@
-package com.xircle.core.repository.notification
+package com.xircle.notificationserver.sse
 
 import org.springframework.stereotype.Repository
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter
