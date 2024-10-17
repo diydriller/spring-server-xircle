@@ -1,4 +1,4 @@
-package com.xircle.core.repository.post
+package com.xircle.jpa.repository.post
 
 import com.xircle.core.domain.post.model.Post
 import org.springframework.data.domain.Pageable

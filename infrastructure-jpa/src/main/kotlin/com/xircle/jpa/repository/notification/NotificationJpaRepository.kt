@@ -1,4 +1,4 @@
-package com.xircle.core.repository.notification
+package com.xircle.jpa.repository.notification
 
 import com.xircle.core.domain.notification.model.Notification
 import org.springframework.data.jpa.repository.JpaRepository

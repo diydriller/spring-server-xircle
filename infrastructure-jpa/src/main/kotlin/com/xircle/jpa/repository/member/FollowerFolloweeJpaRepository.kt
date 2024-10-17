@@ -1,4 +1,4 @@
-package com.xircle.core.repository.member
+package com.xircle.jpa.repository.member
 
 import com.xircle.core.domain.member.model.FollowerFollowee
 import com.xircle.core.domain.member.model.Member
