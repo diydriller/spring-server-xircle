@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: API-SERVICE
+
+  profiles:
+    active: local
+    include:
+      - core
+jwt:
+  secret: xircle
+
+server:
+  port: 9002
