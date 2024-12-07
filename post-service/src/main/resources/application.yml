@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: POST-SERVICE
+
+  profiles:
+    active: local
+    include:
+      - core
+
+server:
+  port: 9003
