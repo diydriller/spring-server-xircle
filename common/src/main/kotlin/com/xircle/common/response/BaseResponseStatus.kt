@@ -14,6 +14,7 @@ enum class BaseResponseStatus(
     NOT_EXIST_EMAIL(false, 2002, "존재하지 않는 이메일입니다."),
     NOT_EQUAL_PASSWORD(false, 2003, "일치하지 않는 비밀번호입니다."),
     NOT_EXIST_MEMBER(false, 2004, "존재하지 않는 멤버입니다."),
+    NOT_AVAILABLE_COUPON(false, 2005, "이용가능한 쿠폰이 없습니다."),
 
     NOT_AUTHENTICATION_ERROR(false, 4001, "인증에 실패했습니다."),
     NOT_AUTHORIZATION_ERROR(false, 4003, "권한이 없습니다."),
