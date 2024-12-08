@@ -10,6 +10,7 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.kafka.core.ProducerFactory
 import org.springframework.kafka.support.serializer.JsonSerializer
+import org.springframework.kafka.transaction.KafkaTransactionManager
 
 @Configuration
 @EnableKafka
@@ -28,6 +29,13 @@ class KafkaConfig {
         config[ProducerConfig.BOOTSTRAP_SERVERS_CONFIG] = kafkaBroker
         config[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java
         config[ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG] = JsonSerializer::class.java
+        config[ProducerConfig.TRANSACTIONAL_ID_CONFIG] = "tx-"
+        config[ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG] = true
         return DefaultKafkaProducerFactory(config)
+    }
+
+    @Bean
+    fun kafkaTransactionManager(producerFactory: ProducerFactory<String, Any>): KafkaTransactionManager<String, Any> {
+        return KafkaTransactionManager(producerFactory)
     }
 }
