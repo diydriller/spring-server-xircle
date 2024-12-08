@@ -2,7 +2,7 @@ package com.xircle.postservice.infrastructure.reader
 
 import com.xircle.postservice.domain.integration.reader.PostReader
 import com.xircle.postservice.domain.model.Post
-import com.xircle.postservice.infrastructure.api.FollowServiceClient
+import com.xircle.postservice.infrastructure.api.client.FollowServiceClient
 import com.xircle.postservice.infrastructure.repository.PostRepository
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
