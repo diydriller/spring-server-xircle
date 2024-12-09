@@ -15,6 +15,7 @@ dependencies {
     implementation ("org.springframework.cloud:spring-cloud-starter-gateway")
     implementation ("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
     implementation("com.auth0:java-jwt:4.4.0")
+    implementation("org.springframework.cloud:spring-cloud-starter-config")
 }
 
 dependencyManagement {

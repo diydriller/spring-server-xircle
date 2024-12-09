@@ -2,8 +2,11 @@ spring:
   application:
     name: FOLLOW-SERVICE
 
-  profiles:
-    active: local
+  config:
+    import: optional:configserver:http://localhost:9000
+  cloud:
+    config:
+      profile: local
 
 server:
   port: 9004
