@@ -2,28 +2,12 @@ spring:
   application:
     name: POST-SERVICE
 
-  profiles:
-    active: local
-    include:
-      - core
+  config:
+    import: optional:configserver:http://localhost:9000
+  cloud:
+    config:
+      profile: local
 
 server:
   port: 9003
 
-resilience4j.circuitbreaker:
-  configs:
-    default:
-      registerHealthIndicator: true
-      slidingWindowSize: 10
-      minimumNumberOfCalls: 5
-      permittedNumberOfCallsInHalfOpenState: 3
-      automaticTransitionFromOpenToHalfOpenEnabled: true
-      waitDurationInOpenState: 5s
-      failureRateThreshold: 50
-      eventConsumerBufferSize: 10
-
-resilience4j.retry:
-  configs:
-    default:
-      maxAttempts: 3
-      waitDuration: 100

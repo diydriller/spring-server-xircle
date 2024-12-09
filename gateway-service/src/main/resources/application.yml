@@ -2,23 +2,11 @@ spring:
   application:
     name: GATEWAY-SERVICE
 
-  profiles:
-    active: local
-
+  config:
+    import: optional:configserver:http://localhost:9000
   cloud:
-    gateway:
-      routes:
-        - id: api-service
-          uri: lb://API-SERVICE
-          predicates:
-            - Path=/api/**
-        - id: notification-service
-          uri: lb://NOTIFICATION-SERVICE
-          predicates:
-            - Path=/notification/**
+    config:
+      profile: local
 
 server:
   port: 8765
-
-jwt:
-  secret: xircle
