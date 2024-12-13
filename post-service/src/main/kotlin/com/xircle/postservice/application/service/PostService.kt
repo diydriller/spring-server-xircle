@@ -38,8 +38,9 @@ class PostService(
         return postReader.findAllProfilePostByMember(page, size, memberId, hashtag)
     }
 
+    @Transactional
     fun getFollowPost(page: Int, size: Int, memberId: Long): List<Post> {
-        val followerIdList = postReader.findAllFollower(page, size, memberId)
+        val followerIdList = postReader.findAllFollower(memberId)
         return postReader.findAllFollowPostByMember(page, size, followerIdList)
     }
 }

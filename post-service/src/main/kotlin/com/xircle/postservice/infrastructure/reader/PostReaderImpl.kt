@@ -24,8 +24,8 @@ class PostReaderImpl(
         return postRepository.findProfilePostByMember(memberId, hashtag, pageable)
     }
 
-    override fun findAllFollower(page: Int, size: Int, followeeId: Long): List<Long> {
-        return followServiceClient.getFollowers(page, size, followeeId)
+    override fun findAllFollower(followeeId: Long): List<Long> {
+        return followServiceClient.getFollowers(followeeId)
     }
 
     override fun findAllFollowPostByMember(page: Int, size: Int, followerIdList: List<Long>): List<Post> {

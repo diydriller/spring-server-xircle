@@ -9,14 +9,12 @@ import org.springframework.stereotype.Component
 class FollowReaderImpl(
     private val memberNodeRepository: MemberNodeRepository
 ) : FollowReader {
-    override fun findFollowers(followeeId: Long, page: Int, size: Int): List<MemberNode> {
-        val skip = page * size
-        return memberNodeRepository.findFollowers(followeeId, skip, size)
+    override fun findFollowers(followeeId: Long): List<MemberNode> {
+        return memberNodeRepository.findFollowers(followeeId)
     }
 
-    override fun findFollowees(followerId: Long, page: Int, size: Int): List<MemberNode> {
-        val skip = page * size
-        return memberNodeRepository.findFollowees(followerId, skip, size)
+    override fun findFollowees(followerId: Long): List<MemberNode> {
+        return memberNodeRepository.findFollowees(followerId)
     }
 
     override fun existsFollowRelation(followerId: Long, followeeId: Long): Boolean {

@@ -8,14 +8,12 @@ import org.springframework.stereotype.Repository
 @Repository
 interface MemberNodeRepository : Neo4jRepository<MemberNode, Long> {
     @Query("OPTIONAL MATCH (u:Member)-[:FOLLOWS]->(f:Member) " +
-            "WHERE u.id = \$followeeId RETURN DISTINCT f " +
-            "SKIP \$skip LIMIT \$limit")
-    fun findFollowers(followeeId: Long, skip: Int, limit: Int): List<MemberNode>
+            "WHERE u.id = \$followeeId RETURN DISTINCT f ")
+    fun findFollowers(followeeId: Long): List<MemberNode>
 
     @Query("OPTIONAL MATCH (u:Member)<-[:FOLLOWS]-(f:Member) " +
-            "WHERE u.id = \$followerId RETURN DISTINCT f " +
-            "SKIP \$skip LIMIT \$limit")
-    fun findFollowees(followerId: Long, skip: Int, limit: Int): List<MemberNode>
+            "WHERE u.id = \$followerId RETURN DISTINCT f ")
+    fun findFollowees(followerId: Long): List<MemberNode>
 
     @Query("OPTIONAL MATCH (follower:Member {id: \$followerId})-[r:FOLLOWS]->(followee:Member {id: \$followeeId}) " +
                 "RETURN COUNT(r) > 0")

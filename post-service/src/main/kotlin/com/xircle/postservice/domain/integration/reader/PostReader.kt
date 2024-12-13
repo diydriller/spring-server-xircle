@@ -7,7 +7,7 @@ interface PostReader {
 
     fun findAllProfilePostByMember(page: Int, size: Int, memberId: Long, hashtag: String): List<Post>
 
-    fun findAllFollower(page: Int, size: Int, followeeId: Long): List<Long>
+    fun findAllFollower(followeeId: Long): List<Long>
 
     fun findAllFollowPostByMember(page: Int, size: Int, followerIdList: List<Long>): List<Post>
 

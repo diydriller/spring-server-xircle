@@ -19,7 +19,7 @@ class FollowService(
         return true
     }
 
-    fun getFollower(page: Int, size: Int, followerId: Long): List<MemberNode> {
-        return followReader.findFollowers(followerId, page, size)
+    fun getFollower(followerId: Long): List<MemberNode> {
+        return followReader.findFollowers(followerId)
     }
 }

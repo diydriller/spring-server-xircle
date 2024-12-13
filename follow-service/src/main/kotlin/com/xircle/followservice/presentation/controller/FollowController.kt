@@ -22,13 +22,11 @@ class FollowController(
 
     @GetMapping("/follower")
     fun getFollower(
-        @RequestParam page: Int,
-        @RequestParam size: Int,
         @RequestHeader(name = "memberId") followerId: Long
-    ):List<Long> {
-        return followService.getFollower(page, size, followerId)
+    ): List<Long> {
+        return followService.getFollower(followerId)
             .map { memberNode ->
-                memberNode.id!!
+                memberNode.id
             }
     }
 }
