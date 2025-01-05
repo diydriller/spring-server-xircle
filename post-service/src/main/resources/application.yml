@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: POST-SERVICE
+
+  config:
+    import: optional:configserver:http://localhost:9000
+  cloud:
+    config:
+      profile: local
+
+server:
+  port: 9003
+
