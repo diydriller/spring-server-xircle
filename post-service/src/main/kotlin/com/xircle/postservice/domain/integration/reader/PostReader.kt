@@ -12,4 +12,6 @@ interface PostReader {
     fun findAllFollowPostByMember(page: Int, size: Int, followerIdList: List<Long>): List<Post>
 
     fun findAllByIdList(idList: List<Long>): List<Post>
+
+    fun findById(postId: Long): Post
 }

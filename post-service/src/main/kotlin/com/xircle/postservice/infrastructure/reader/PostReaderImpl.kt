@@ -1,5 +1,7 @@
 package com.xircle.postservice.infrastructure.reader
 
+import com.xircle.common.exception.NotFoundException
+import com.xircle.common.response.BaseResponseStatus
 import com.xircle.postservice.domain.integration.reader.PostReader
 import com.xircle.postservice.domain.model.Post
 import com.xircle.postservice.infrastructure.api.client.FollowServiceClient
@@ -35,5 +37,9 @@ class PostReaderImpl(
 
     override fun findAllByIdList(idList: List<Long>): List<Post> {
         return postRepository.findAllByIsDeletedAndIdIn(false, idList)
+    }
+
+    override fun findById(postId: Long): Post {
+        return postRepository.findPostById(postId) ?: throw NotFoundException(BaseResponseStatus.NOT_EXIST_POST)
     }
 }
