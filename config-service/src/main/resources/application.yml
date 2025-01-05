@@ -1,0 +1,18 @@
+server:
+  port: 9000
+
+spring:
+  application:
+    name: CONFIG-SERVICE
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/diydriller/spring-cloud-config
+          search-paths: spring-server-xircle/**
+          default-label: main
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
