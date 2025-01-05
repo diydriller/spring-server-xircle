@@ -19,4 +19,6 @@ interface PostRepository : JpaRepository<Post, Long> {
 
     @Query("SELECT p FROM Post p WHERE p.id IN :postIdList AND p.isDeleted = :isDeleted")
     fun findAllByIsDeletedAndIdIn(isDeleted: Boolean, postIdList: List<Long>): List<Post>
+
+    fun findPostById(postId: Long): Post?
 }
