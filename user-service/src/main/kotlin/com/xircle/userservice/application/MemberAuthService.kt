@@ -4,6 +4,7 @@ import com.xircle.common.exception.NotFoundException
 import com.xircle.common.response.BaseResponseStatus
 import com.xircle.userservice.application.dto.MemberDto
 import com.xircle.common.event.UserCreationEventDto
+import com.xircle.common.util.StringUtil.Companion.CREATE_USER_TOPIC
 import com.xircle.userservice.domain.integration.reader.MemberReader
 import com.xircle.userservice.domain.integration.store.MemberStore
 import com.xircle.userservice.domain.model.Interest
@@ -52,7 +53,7 @@ class MemberAuthService(
             member.addInterest(Interest(it))
         }
         memberStore.saveMember(member)
-        messagePublisher.publish("user-created", UserCreationEventDto(member.id!!))
+        messagePublisher.publish(CREATE_USER_TOPIC, UserCreationEventDto(member.id!!))
     }
 
     @Transactional
