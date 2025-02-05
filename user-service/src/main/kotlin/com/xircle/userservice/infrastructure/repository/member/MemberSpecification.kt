@@ -1,4 +1,4 @@
-package com.xircle.userservice.infrastructure.repository
+package com.xircle.userservice.infrastructure.repository.member
 
 import com.xircle.userservice.domain.model.Member
 import org.springframework.data.jpa.domain.Specification

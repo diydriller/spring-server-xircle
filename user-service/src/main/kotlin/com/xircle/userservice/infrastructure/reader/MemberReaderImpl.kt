@@ -6,8 +6,8 @@ import com.xircle.common.response.BaseResponseStatus
 import com.xircle.userservice.domain.integration.reader.MemberReader
 import com.xircle.userservice.domain.model.Member
 import com.xircle.userservice.domain.query.MemberSearchCondition
-import com.xircle.userservice.infrastructure.repository.MemberRepository
-import com.xircle.userservice.infrastructure.repository.MemberSpecification
+import com.xircle.userservice.infrastructure.repository.member.MemberRepository
+import com.xircle.userservice.infrastructure.repository.member.MemberSpecification
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.domain.Specification

@@ -21,6 +21,7 @@ class Member(
     var isProfilePublic: Boolean,
     @Column(name = "is_graduate")
     var isGraduate: Boolean,
+    @Column(name = "phone_number")
     var phoneNumber: String,
     @Column(name = "work_place")
     var workPlace: String?,
