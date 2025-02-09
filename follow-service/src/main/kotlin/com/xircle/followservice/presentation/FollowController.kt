@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Min
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
+@RequestMapping("/follow-service")
 @RestController
 class FollowController(
     private val followService: FollowService

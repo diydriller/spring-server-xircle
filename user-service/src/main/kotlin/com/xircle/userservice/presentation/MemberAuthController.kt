@@ -8,15 +8,14 @@ import com.xircle.userservice.presentation.dto.LoginRequest
 import com.xircle.userservice.presentation.dto.LoginResponse
 import com.xircle.userservice.presentation.dto.SignUpRequest
 import com.xircle.userservice.security.MemberDetails
-import com.xircle.common.auth.TokenService
+import com.xircle.userservice.auth.TokenService
 import jakarta.servlet.http.HttpSession
 import jakarta.validation.Valid
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
+@RequestMapping("/user-service")
 @RestController
 class MemberAuthController(
     private val memberAuthService: MemberAuthService,
@@ -42,4 +41,6 @@ class MemberAuthController(
         session.setAttribute("member", MemberDetails(member))
         return ResponseEntity.ok().body(BaseResponse(response))
     }
+
+    @GetMapping("/")
 }
