@@ -22,6 +22,7 @@ class PostController(private val postService: PostService) {
         @RequestHeader memberId: Long
     ): ResponseEntity<BaseResponse<Any>> {
         val postDto = CreatePostMapper.INSTANCE.covertToDto(request)
+        postDto.memberId = memberId
         postService.createPost(postDto)
         return ResponseEntity.ok().body(BaseResponse(BaseResponseStatus.SUCCESS))
     }
@@ -49,7 +50,7 @@ class PostController(private val postService: PostService) {
         return ResponseEntity.ok().body(BaseResponse(response))
     }
 
-    @GetMapping("/member/{memberId}/post-preview")
+    @GetMapping("/member/{memberId}/post/preview")
     fun getPostPreview(
         @RequestParam(value = "page", defaultValue = "0") page: Int,
         @RequestParam(value = "size", defaultValue = "10") size: Int,
@@ -68,7 +69,7 @@ class PostController(private val postService: PostService) {
         return ResponseEntity.ok().body(BaseResponse(response))
     }
 
-    @GetMapping("/follow/post")
+    @GetMapping("/feed")
     fun getFollowPost(
         @RequestParam(name = "page", defaultValue = "0") page: Int,
         @RequestParam(name = "size", defaultValue = "10") size: Int,

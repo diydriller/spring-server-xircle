@@ -1,6 +1,7 @@
 package com.xircle.postservice.application
 
 import com.xircle.postservice.application.dto.PostDto
+import com.xircle.postservice.domain.integration.reader.FollowReader
 import com.xircle.postservice.domain.integration.reader.PostReader
 import com.xircle.postservice.domain.integration.store.PostStore
 import com.xircle.postservice.domain.model.Hashtag
@@ -11,7 +12,8 @@ import org.springframework.stereotype.Service
 @Service
 class PostService(
     private val postStore: PostStore,
-    private val postReader: PostReader
+    private val postReader: PostReader,
+    private val followReader: FollowReader
 ) {
     @Transactional
     fun createPost(postDto: PostDto): Post {
@@ -28,19 +30,16 @@ class PostService(
         return postStore.savePost(post)
     }
 
-    @Transactional
     fun getPostByMember(page: Int, size: Int, memberId: Long): List<Post> {
         return postReader.findAllPostByMember(page, size, memberId)
     }
 
-    @Transactional
     fun getPostPreview(page: Int, size: Int, memberId: Long, interest: String): List<Post> {
         return postReader.findAllPostByMemberInterest(page, size, memberId, interest)
     }
 
-    @Transactional
     fun getFollowPost(page: Int, size: Int, memberId: Long): List<Post> {
-        val followerIdList = postReader.findAllFollower(memberId)
+        val followerIdList = followReader.findAllFollower(memberId)
         return postReader.findAllFollowPostByMember(page, size, followerIdList)
     }
 }
