@@ -16,15 +16,15 @@ class FollowController(
         @PathVariable(name = "memberId") followeeId: Long,
         @RequestHeader(name = "memberId") followerId: Long
     ): ResponseEntity<BaseResponse<Boolean>> {
-        val response = followService.followMember(followerId, followeeId)
-        return ResponseEntity.ok().body(BaseResponse(response))
+        val isFollow = followService.toggleFollowMember(followerId, followeeId)
+        return ResponseEntity.ok().body(BaseResponse(isFollow))
     }
 
     @GetMapping("/follower")
     fun getFollower(
-        @RequestHeader(name = "memberId") followerId: Long
+        @RequestHeader(name = "memberId") followeeId: Long
     ): List<Long> {
-        return followService.getFollower(followerId)
+        return followService.getFollower(followeeId)
             .map { memberNode ->
                 memberNode.id
             }
