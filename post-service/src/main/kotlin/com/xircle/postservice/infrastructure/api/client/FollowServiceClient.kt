@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestHeader
 
 @FeignClient(name = "follow-service", fallback = FollowServiceClientFallbackFactory::class)
 interface FollowServiceClient {
-    @GetMapping("/follower")
+    @GetMapping("/follow-service/follower")
     fun getFollowerList(
         @RequestHeader("memberId") memberId: Long
     ): List<Long>

@@ -14,6 +14,7 @@ import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
+@RequestMapping("/post-service")
 @RestController
 class PostController(private val postService: PostService) {
     @PostMapping("/post", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])

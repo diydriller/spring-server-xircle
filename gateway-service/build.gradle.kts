@@ -12,14 +12,15 @@ ext {
 
 dependencies {
     implementation(project(":common"))
-    implementation ("org.springframework.cloud:spring-cloud-starter-gateway")
-    implementation ("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
+    implementation("org.springframework.cloud:spring-cloud-starter-gateway")
+    implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
     implementation("com.auth0:java-jwt:4.4.0")
     implementation("org.springframework.cloud:spring-cloud-starter-config")
+    implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
 }
 
 dependencyManagement {
     imports {
-        mavenBom ("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
     }
 }

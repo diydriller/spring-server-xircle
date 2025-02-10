@@ -7,6 +7,7 @@ import com.xircle.postservice.presentation.dto.CommentResponse
 import com.xircle.postservice.presentation.dto.CreateCommentRequest
 import org.springframework.web.bind.annotation.*
 
+@RequestMapping("/post-service")
 @RestController
 class CommentController(
     private val commentService: CommentService
