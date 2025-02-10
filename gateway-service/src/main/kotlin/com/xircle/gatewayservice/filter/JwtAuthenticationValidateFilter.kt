@@ -1,6 +1,7 @@
 package com.xircle.gatewayservice.filter
 
-import com.xircle.common.auth.TokenService
+import com.xircle.gatewayservice.api.client.UserServiceClientAdapter
+import com.xircle.gatewayservice.auth.TokenService
 import com.xircle.gatewayservice.response.ResponseUtil
 import org.springframework.http.server.reactive.ServerHttpRequest
 import org.springframework.stereotype.Component
@@ -11,9 +12,10 @@ import reactor.core.publisher.Mono
 
 @Component
 class JwtAuthenticationValidateFilter(
-    private val tokenService: TokenService
+    private val tokenService: TokenService,
+    private val userServiceClientAdapter: UserServiceClientAdapter,
 ) : WebFilter {
-    private val publicPaths = arrayOf("/api/member", "/api/login")
+    private val publicPaths = arrayOf("/user-service/member", "/user-service/login")
 
     override fun filter(exchange: ServerWebExchange, chain: WebFilterChain): Mono<Void> {
         val request: ServerHttpRequest = exchange.request
@@ -26,23 +28,28 @@ class JwtAuthenticationValidateFilter(
 
         val token: String? = request.headers.getFirst("Authorization")
         if (token.isNullOrEmpty()) {
-            return ResponseUtil.createExceptionResponse(exchange)
+            return ResponseUtil.createAuthenticationErrorResponse(exchange)
         }
 
-        try {
-            tokenService.verifyToken(token)
-        } catch (e: Exception) {
-            return ResponseUtil.createExceptionResponse(exchange)
-        }
-
-        val memberId = tokenService.decodeToken(token).getClaim("id").asString()
-
-        val modifiedRequest = exchange.request.mutate()
-            .header("memberId", memberId)
-            .build()
-        val modifiedExchange = exchange.mutate()
-            .request(modifiedRequest)
-            .build()
-        return chain.filter(modifiedExchange);
+        return Mono.fromCallable {
+                tokenService.verifyToken(token)
+                tokenService.decodeToken(token)
+            }
+            .flatMap { decodedToken ->
+                val memberId = decodedToken.getClaim("id").asLong()
+                Mono.fromFuture(userServiceClientAdapter.getMemberInfo(memberId.toLong()))
+            }
+            .flatMap { member ->
+                val modifiedRequest = exchange.request.mutate()
+                    .header("memberId", member.id.toString())
+                    .build()
+                val modifiedExchange = exchange.mutate()
+                    .request(modifiedRequest)
+                    .build()
+                chain.filter(modifiedExchange)
+            }
+            .onErrorResume {
+                ResponseUtil.createAuthenticationErrorResponse(exchange)
+            }
     }
 }
