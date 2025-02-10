@@ -1,4 +1,4 @@
-package com.xircle.common.auth
+package com.xircle.userservice.auth
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWT.decode
