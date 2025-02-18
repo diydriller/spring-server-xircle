@@ -20,3 +20,7 @@ dependencyManagement {
     }
 }
 
+tasks.named<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
+    imageName.set("diydriller/${rootProject.name}-${project.name}")
+}
+

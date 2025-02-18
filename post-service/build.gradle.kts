@@ -29,3 +29,8 @@ dependencyManagement {
         mavenBom ("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
     }
 }
+
+tasks.named<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
+    imageName.set("diydriller/${rootProject.name}-${project.name}")
+}
+
