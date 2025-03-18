@@ -28,6 +28,10 @@ class MemberReaderImpl(
         }
     }
 
+    override fun findMemberByIdListIn(memberIdList: List<Long>): List<Member> {
+        return memberRepository.findMemberByIdListIn(memberIdList)
+    }
+
     override fun findMemberById(id: Long): Member {
         return memberRepository.findMemberById(id) ?: throw NotFoundException(BaseResponseStatus.NOT_EXIST_EMAIL)
     }

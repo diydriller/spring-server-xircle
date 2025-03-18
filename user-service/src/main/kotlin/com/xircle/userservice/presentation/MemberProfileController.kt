@@ -81,4 +81,18 @@ class MemberProfileController(
             profileImage = member.profileImage
         )
     }
+
+    @GetMapping("/member/info")
+    fun getMemberInfoList(
+        @RequestParam memberIdList: List<Long>
+    ): List<MemberInfo> {
+        return memberReader.findMemberByIdListIn(memberIdList).map { member ->
+            MemberInfo(
+                id = member.id!!,
+                email = member.email,
+                nickname = member.nickname,
+                profileImage = member.profileImage
+            )
+        }
+    }
 }

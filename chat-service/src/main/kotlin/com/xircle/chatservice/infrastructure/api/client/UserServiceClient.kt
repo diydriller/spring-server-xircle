@@ -11,4 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam
 interface UserServiceClient {
     @GetMapping("/user-service/member/{memberId}/info")
     fun getMemberInfo(@PathVariable("memberId") memberId: Long): MemberInfo?
+
+    @GetMapping("/user-service/member/info")
+    fun getMemberInfoList(@RequestParam memberIdList: List<Long>): List<MemberInfo>
 }
