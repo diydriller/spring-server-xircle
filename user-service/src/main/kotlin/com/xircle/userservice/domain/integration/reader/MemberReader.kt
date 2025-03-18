@@ -14,4 +14,5 @@ interface MemberReader {
     fun findMemberProfileById(memberId: Long): Member
     fun findMemberByEmail(email: String): Member
     fun isExistMemberByEmail(email: String)
+    fun findMemberByIdListIn(memberIdList: List<Long>): List<Member>
 }

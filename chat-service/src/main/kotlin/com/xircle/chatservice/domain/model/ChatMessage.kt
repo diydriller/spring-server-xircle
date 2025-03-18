@@ -8,12 +8,9 @@ import org.springframework.data.mongodb.core.mapping.Field
 data class ChatMessage(
     @Id
     var id: String? = null,
-
     val message: String,
-
-    @Field(name = "room_id")
-    var roomId: String,
-
+    @Field("room_id")
+    val roomId: String,
     @Field("sender_id")
-    val senderId: Long,
+    val senderId: Long
 ) : BaseEntity()

@@ -1,6 +1,6 @@
 package com.xircle.chatservice.application.dto
 
-data class ChatMessageDto(
+data class SendChatMessageDto(
     val roomId: String,
     val sessionId: String,
     val senderId: Long,

@@ -1,6 +1,6 @@
 package com.xircle.chatservice.mapper
 
-import com.xircle.chatservice.application.dto.ChatRoomDto
+import com.xircle.chatservice.application.dto.CreateChatRoomDto
 import com.xircle.chatservice.presentation.dto.CreateChatRoomRequest
 import org.mapstruct.Mapper
 import org.mapstruct.Mapping
@@ -18,5 +18,5 @@ interface CreateChatRoomMapper {
             createChatRoomRequest: CreateChatRoomRequest,
             sessionId: String,
             hostId: Long
-        ): ChatRoomDto
+        ): CreateChatRoomDto
 }

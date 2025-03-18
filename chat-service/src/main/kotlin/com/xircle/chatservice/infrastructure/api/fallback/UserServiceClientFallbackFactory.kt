@@ -12,6 +12,10 @@ class UserServiceClientFallbackFactory : FallbackFactory<UserServiceClient> {
             override fun getMemberInfo(memberId: Long): MemberInfo? {
                 return null
             }
+
+            override fun getMemberInfoList(memberIdList: List<Long>): List<MemberInfo> {
+                return emptyList()
+            }
         }
     }
 }

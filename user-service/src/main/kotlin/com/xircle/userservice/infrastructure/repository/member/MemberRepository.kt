@@ -12,4 +12,7 @@ interface MemberRepository : JpaRepository<Member, Long>, JpaSpecificationExecut
 
     @Query("SELECT DISTINCT m FROM Member m JOIN FETCH m.interestList WHERE m.id = :id")
     fun findMemberProfileById(id: Long): Member?
+
+    @Query("SELECT m FROM Member m WHERE m.id IN :memberIdList ")
+    fun findMemberByIdListIn(memberIdList: List<Long>): List<Member>
 }
