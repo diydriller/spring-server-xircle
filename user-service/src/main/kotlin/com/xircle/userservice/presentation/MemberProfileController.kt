@@ -1,7 +1,9 @@
 package com.xircle.userservice.presentation
 
+import com.xircle.common.dto.MemberInfo
 import com.xircle.common.response.BaseResponse
 import com.xircle.userservice.application.MemberProfileService
+import com.xircle.userservice.domain.integration.reader.MemberReader
 import com.xircle.userservice.domain.query.MemberSearchCondition
 import com.xircle.userservice.presentation.dto.MemberProfile
 import com.xircle.userservice.presentation.dto.MemberSearchResponse
@@ -12,7 +14,10 @@ import org.springframework.web.bind.annotation.*
 
 @RequestMapping("/user-service")
 @RestController
-class MemberProfileController(private val memberProfileService: MemberProfileService) {
+class MemberProfileController(
+    private val memberProfileService: MemberProfileService,
+    private val memberReader: MemberReader
+) {
     @GetMapping("/profile/member")
     fun searchMember(
         @RequestParam(name = "page", defaultValue = "0") page: Int,
@@ -62,5 +67,18 @@ class MemberProfileController(private val memberProfileService: MemberProfileSer
             profileImg = member.profileImage
         )
         return ResponseEntity.ok().body(BaseResponse(memberProfile))
+    }
+
+    @GetMapping("/member/{memberId}/info")
+    fun getMemberInfo(
+        @PathVariable memberId: Long
+    ): MemberInfo {
+        val member = memberReader.findMemberById(memberId)
+        return MemberInfo(
+            id = member.id!!,
+            email = member.email,
+            nickname = member.nickname,
+            profileImage = member.profileImage
+        )
     }
 }
