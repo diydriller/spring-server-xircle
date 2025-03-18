@@ -1,6 +1,6 @@
 package com.xircle.chatservice.mapper
 
-import com.xircle.chatservice.application.dto.ChatMessageDto
+import com.xircle.chatservice.application.dto.SendChatMessageDto
 import com.xircle.chatservice.presentation.dto.ChatMessageRequest
 import org.mapstruct.Mapper
 import org.mapstruct.Mapping
@@ -18,5 +18,5 @@ interface ChatMessageMapper {
         chatMessageRequest: ChatMessageRequest,
         sessionId: String,
         senderId: Long
-    ): ChatMessageDto
+    ): SendChatMessageDto
 }
