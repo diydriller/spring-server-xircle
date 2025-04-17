@@ -11,9 +11,7 @@ import com.xircle.chatservice.domain.integration.publisher.ChatPublisher
 import com.xircle.chatservice.domain.integration.publisher.MessagePublisher
 import com.xircle.chatservice.domain.integration.reader.ChatReader
 import com.xircle.chatservice.domain.integration.store.ChatStore
-import com.xircle.chatservice.domain.model.ChatMember
 import com.xircle.chatservice.domain.model.ChatMessage
-import com.xircle.chatservice.domain.model.ChatReadStatus
 import com.xircle.chatservice.domain.model.ChatRoom
 import com.xircle.chatservice.infrastructure.api.client.UserServiceClient
 import org.springframework.stereotype.Service
@@ -30,38 +28,33 @@ class ChatService(
 ) {
     @Transactional
     fun createRoom(createChatRoomDto: CreateChatRoomDto): ChatRoom {
-        val chatRoom = ChatRoom(name = createChatRoomDto.name)
-        chatStore.saveChatRoom(chatRoom)
-
-        val chatRoomMemberList = listOf(
-            ChatMember(
-                memberId = createChatRoomDto.memberId,
-                roomId = chatRoom.id!!,
-                isHost = false
-            ),
-            ChatMember(
-                memberId = createChatRoomDto.hostId,
-                roomId = chatRoom.id!!,
-                isHost = true
-            )
+        val hostChatRoom = ChatRoom(
+            name = createChatRoomDto.name,
+            userId = createChatRoomDto.hostId
         )
-        chatStore.saveChatRoomMember(chatRoomMemberList)
+        chatStore.saveChatRoom(hostChatRoom)
+
+        val memberChatRoom = ChatRoom(
+            name = createChatRoomDto.name,
+            userId = createChatRoomDto.memberId
+        )
+        chatStore.saveChatRoom(memberChatRoom)
 
         chatPublisher.publishCreatedChatRoom(
             ChatRoomCommand(
                 sessionId = createChatRoomDto.sessionId,
                 hostId = createChatRoomDto.hostId,
                 memberId = createChatRoomDto.memberId,
-                roomId = chatRoom.id!!,
-                roomName = chatRoom.name
+                roomId = hostChatRoom.id!!,
+                roomName = memberChatRoom.name
             )
         )
-        return chatRoom
+        return hostChatRoom
     }
 
     @Transactional
     fun chat(sendChatMessageDto: SendChatMessageDto): ChatMessage {
-        val chatRoom = chatReader.findChatRoom(sendChatMessageDto.roomId)
+        val chatRoom = chatReader.findChatRoom(sendChatMessageDto.roomId, sendChatMessageDto.senderId)
         val chatMessage = ChatMessage(
             message = sendChatMessageDto.message,
             roomId = chatRoom.id!!,
@@ -69,7 +62,7 @@ class ChatService(
         )
         chatStore.saveChatMessage(chatMessage)
         chatRoom.lastMessageId = chatMessage.id
-        chatStore.saveChatRoom(chatRoom)
+        chatStore.updateChatRoom(chatRoom)
 
         chatPublisher.publishChatMessage(
             ChatMessageCommand(
@@ -99,19 +92,15 @@ class ChatService(
 
     fun getChatRoom(memberId: Long, lastMessageId: String?, size: Int): List<GetChatRoomDto> {
         val chatRoomList = chatReader.findAllChatRoom(memberId, lastMessageId, size)
-        val chatRoomIdList = chatRoomList.map { chatRoom -> chatRoom.id!! }
 
-        val chatReadStatusList = chatReader.findAllReadStatusInEveryRoom(chatRoomIdList, memberId)
-        val chatReadStatusMap = chatReadStatusList.associateBy { chatReadStatus -> chatReadStatus.roomId }
         val unreadChatMessageCountList =
-            chatReader.findAllUnreadChatMessageCountInEveryRoom(chatReadStatusList, memberId)
+            chatReader.findAllUnreadChatMessageCountInEveryRoom(chatRoomList, memberId)
         val unreadChatMessageCountMap = unreadChatMessageCountList.associateBy { it.roomId }
 
-        val lastMessageList = chatReader.findAllLastChatMessageInEveryRoom(chatRoomIdList)
+        val lastMessageList = chatReader.findAllLastChatMessageInEveryRoom(chatRoomList)
         val lastMessageMap = lastMessageList.associateBy { lastMessage -> lastMessage.roomId }
 
         return chatRoomList.map { chatRoom ->
-            val lastReadMessageId = chatReadStatusMap[chatRoom.id]?.lastReadMessageId
             val lastMessage = lastMessageMap[chatRoom.id]?.message
             val unreadChatMessageCount = unreadChatMessageCountMap[chatRoom.id]?.unreadCount ?: 0
 
@@ -119,21 +108,20 @@ class ChatService(
                 roomId = chatRoom.id!!,
                 name = chatRoom.name,
                 unreadCount = unreadChatMessageCount,
-                lastReadMessageId = lastReadMessageId,
+                lastReadMessageId = chatRoom.lastReadMessageId,
                 lastMessage = lastMessage
             )
         }
     }
 
     fun getChatMessage(roomId: String, lastMessageId: String?, size: Int): List<GetChatMessageDto> {
-        chatReader.findChatRoom(roomId)
-        val memberList = chatReader.findChatMember(roomId)
-        val memberIdList = memberList.map { it.memberId!! }
+        val chatMessageList = chatReader.findAllChatMessage(roomId, lastMessageId, size)
 
+        val memberIdList = chatMessageList.map { it.senderId }
         val memberInfoList = userServiceClient.getMemberInfoList(memberIdList)
         val memberInfoMap = memberInfoList.associateBy { it.id }
 
-        return chatReader.findAllChatMessage(roomId, lastMessageId, size).map {
+        return chatMessageList.map {
             val memberInfo = memberInfoMap[it.senderId]
             GetChatMessageDto(
                 id = it.id,
@@ -148,16 +136,8 @@ class ChatService(
     }
 
     fun readChat(memberId: Long, roomId: String, lastReadMessageId: String) {
-        val chatReadStatus = chatReader.findChatReadStatus(memberId, roomId)
-            ?.apply {
-                this.lastReadMessageId = lastReadMessageId
-                this.updatedAt = LocalDateTime.now()
-            } ?: ChatReadStatus(
-            roomId = roomId,
-            memberId = memberId,
-            lastReadMessageId = lastReadMessageId,
-            lastReadMessageTime = LocalDateTime.now()
-        )
-        chatStore.saveChatReadStatus(chatReadStatus)
+        val chatRoom = chatReader.findChatRoom(roomId, memberId)
+        chatRoom.lastReadMessageId = lastReadMessageId
+        chatRoom.lastReadMessageTime = LocalDateTime.now()
     }
 }
