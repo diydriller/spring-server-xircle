@@ -1,5 +1,6 @@
 package com.xircle.followservice.presentation
 
+import com.xircle.common.dto.MemberInfo
 import com.xircle.common.response.BaseResponse
 import com.xircle.followservice.application.FollowService
 import jakarta.validation.constraints.Min
@@ -29,5 +30,13 @@ class FollowController(
             .map { memberNode ->
                 memberNode.id
             }
+    }
+
+    @GetMapping("/following-of-following/{memberId}")
+    fun getRecommendation(
+        @PathVariable(name = "memberId") memberId: Long,
+    ): ResponseEntity<BaseResponse<List<MemberInfo>>> {
+        val memberInfoList = followService.recommendFor(memberId)
+        return ResponseEntity.ok().body(BaseResponse(memberInfoList))
     }
 }

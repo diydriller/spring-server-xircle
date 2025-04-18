@@ -7,4 +7,5 @@ interface FollowReader {
     fun findFolloweeList(followerId: Long): List<MemberNode>
     fun existsFollowRelation(followerId: Long, followeeId: Long): Boolean
     fun existsMember(memberId: Long): Boolean
+    fun recommendFollowerOfFollower(memberId: Long): List<MemberNode>
 }

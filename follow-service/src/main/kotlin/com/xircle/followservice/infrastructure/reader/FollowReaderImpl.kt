@@ -24,4 +24,8 @@ class FollowReaderImpl(
     override fun existsMember(memberId: Long): Boolean {
         return memberNodeRepository.existsById(memberId)
     }
+
+    override fun recommendFollowerOfFollower(memberId: Long): List<MemberNode> {
+        return memberNodeRepository.recommendFollowerOfFollower(memberId)
+    }
 }
