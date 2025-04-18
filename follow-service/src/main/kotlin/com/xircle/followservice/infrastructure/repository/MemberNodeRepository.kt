@@ -38,4 +38,11 @@ interface MemberNodeRepository : Neo4jRepository<MemberNode, Long> {
                 "DELETE r"
     )
     fun unfollow(followerId: Long, followeeId: Long)
+
+    @Query(
+        "OPTIONAL MATCH (a:Member)-[:FOLLOWS]->(b:Member)-[:FOLLOWS]->(c:Member) " +
+                "WHERE a.id = \$memberId AND NOT (a)-[:FOLLOWS]->(c) AND a.id <> c.id " +
+                "RETURN DISTINCT c LIMIT 20"
+    )
+    fun recommendFollowerOfFollower(memberId: Long): List<MemberNode>
 }
