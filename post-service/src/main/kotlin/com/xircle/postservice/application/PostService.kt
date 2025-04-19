@@ -42,4 +42,8 @@ class PostService(
         val followerIdList = followReader.findAllFollower(memberId)
         return postReader.findAllFollowPostByMember(page, size, followerIdList)
     }
+
+    fun getTopCommentedPost(): List<Post> {
+        return postReader.findTop5ByCommentCount()
+    }
 }

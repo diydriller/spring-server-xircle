@@ -21,6 +21,9 @@ class Post(
     @OneToMany(mappedBy = "post", cascade = [CascadeType.PERSIST])
     val hashtagList: MutableList<Hashtag> = ArrayList()
 
+    @OneToMany(mappedBy = "post")
+    val commentList: MutableList<Comment> = ArrayList()
+
     fun addHashtag(hashtag: Hashtag) {
         hashtagList.add(hashtag)
         hashtag.post = this

@@ -36,4 +36,9 @@ class PostReaderImpl(
     override fun findById(postId: Long): Post {
         return postRepository.findPostById(postId) ?: throw NotFoundException(BaseResponseStatus.NOT_EXIST_POST)
     }
+
+    override fun findTop5ByCommentCount(): List<Post> {
+        val pageable = PageRequest.of(0, 5, Sort.Direction.DESC, "createdAt")
+        return postRepository.findTop5ByCommentCount(pageable)
+    }
 }

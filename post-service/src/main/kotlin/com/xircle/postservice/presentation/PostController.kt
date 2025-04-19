@@ -91,4 +91,24 @@ class PostController(private val postService: PostService) {
             }.toList()
         return ResponseEntity.ok().body(BaseResponse(response))
     }
+
+    @GetMapping("/top-commented")
+    fun getTopCommentedPost(
+        @RequestHeader(name = "memberId") memberId: Long
+    ): ResponseEntity<BaseResponse<List<GetPostResponse>>> {
+        val response = postService.getTopCommentedPost().stream()
+            .map { post ->
+                GetPostResponse(
+                    id = post.id!!,
+                    title = post.title,
+                    content = post.content,
+                    postImgSrc = post.postImgSrc,
+                    createdAt = post.createdAt!!,
+                    hashtagList = post.hashtagList.map { hashtag ->
+                        hashtag.name
+                    }
+                )
+            }.toList()
+        return ResponseEntity.ok().body(BaseResponse(response))
+    }
 }

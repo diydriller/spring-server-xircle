@@ -21,4 +21,7 @@ interface PostRepository : JpaRepository<Post, Long> {
     fun findAllByIsDeletedAndIdIn(isDeleted: Boolean, postIdList: List<Long>): List<Post>
 
     fun findPostById(postId: Long): Post?
+
+    @Query("SELECT p FROM Post p JOIN p.commentList c GROUP BY p ORDER BY COUNT(c) DESC ")
+    fun findTop5ByCommentCount(pageable: Pageable): List<Post>
 }
