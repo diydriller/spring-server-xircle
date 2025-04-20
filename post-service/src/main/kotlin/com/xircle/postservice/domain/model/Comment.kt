@@ -1,9 +1,11 @@
 package com.xircle.postservice.domain.model
 
+import com.fasterxml.jackson.annotation.JsonBackReference
 import jakarta.persistence.*
 
 @Entity
 class Comment(
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "post_id")
     val post: Post,

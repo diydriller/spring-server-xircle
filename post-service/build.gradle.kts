@@ -22,6 +22,7 @@ dependencies {
     runtimeOnly("com.mysql:mysql-connector-j")
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
     implementation("org.springframework.cloud:spring-cloud-starter-config")
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
 }
 
 dependencyManagement {

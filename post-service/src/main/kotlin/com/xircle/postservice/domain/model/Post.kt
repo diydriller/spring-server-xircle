@@ -1,5 +1,6 @@
 package com.xircle.postservice.domain.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonManagedReference
 import jakarta.persistence.*
 import org.hibernate.annotations.BatchSize
@@ -21,6 +22,7 @@ class Post(
     @OneToMany(mappedBy = "post", cascade = [CascadeType.PERSIST])
     val hashtagList: MutableList<Hashtag> = ArrayList()
 
+    @JsonIgnore
     @OneToMany(mappedBy = "post")
     val commentList: MutableList<Comment> = ArrayList()
 
