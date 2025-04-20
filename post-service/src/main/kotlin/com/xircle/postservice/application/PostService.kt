@@ -6,6 +6,7 @@ import com.xircle.postservice.domain.integration.reader.PostReader
 import com.xircle.postservice.domain.integration.store.PostStore
 import com.xircle.postservice.domain.model.Hashtag
 import com.xircle.postservice.domain.model.Post
+import com.xircle.postservice.infrastructure.cache.PerCacheable
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 
@@ -41,5 +42,10 @@ class PostService(
     fun getFollowPost(page: Int, size: Int, memberId: Long): List<Post> {
         val followerIdList = followReader.findAllFollower(memberId)
         return postReader.findAllFollowPostByMember(page, size, followerIdList)
+    }
+
+    @PerCacheable(key = "top5:most-commented", ttlSeconds = 300, beta = 1.0)
+    fun getTopCommentedPost(): List<Post> {
+        return postReader.findTop5ByCommentCount()
     }
 }

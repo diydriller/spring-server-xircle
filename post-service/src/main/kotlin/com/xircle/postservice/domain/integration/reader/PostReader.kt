@@ -12,4 +12,6 @@ interface PostReader {
     fun findAllByIdList(idList: List<Long>): List<Post>
 
     fun findById(postId: Long): Post
+
+    fun findTop5ByCommentCount(): List<Post>
 }
